@@ -1,7 +1,7 @@
 #!/usr/bin/env osascript
 -- Apple Mail mailbox automation script.
--- given a project code, create a new dedicated mail box, and add a new rule 
--- that moves the associated mails to this mailbox.
+-- given a project code, create a new dedicated mailbox, and add a new rule 
+-- that moves the associated mails to the latter.
 
 on run argv
 	set mail_account to system attribute "MAIL_ACCOUNT"
