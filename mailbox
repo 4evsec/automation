@@ -1,0 +1,38 @@
+#!/usr/bin/env osascript
+-- Apple Mail mailbox automation script.
+-- given a project code, create a new dedicated mail box, and add a new rule 
+-- that moves the associated mails to this mailbox.
+
+on run argv
+	set mail_account to system attribute "MAIL_ACCOUNT"
+	set project_mailbox to "PROJECTS"
+	
+	set project_code to item 1 of argv
+	log "Creating mailbox for " & project_code
+	
+	tell application "Mail"
+		activate
+		
+		set new_mailbox to project_mailbox & "/" & project_code
+		tell account mail_account to make new mailbox with properties {¬
+			name:new_mailbox ¬
+		}
+		
+		log "Adding a new rule"
+		set new_rule to make new rule at end of rules with properties {¬
+			name:project_code ¬
+		}
+		
+		tell new_rule
+			set enabled to true
+			set should move message to true
+			set move message to mailbox new_mailbox of account mail_account of application "Mail"
+			set rule_condition to make new rule condition at beginning of rule conditions
+			tell rule_condition
+				set rule type to subject header
+				set qualifier to does contain value
+				set expression to project_code
+			end tell
+		end tell
+	end tell
+end run
